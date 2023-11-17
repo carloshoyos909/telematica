@@ -13,10 +13,10 @@ provider "aws" {
   region  = "us-east-1"
 }
 
-resource "aws_instance" "app_server" {
+resource "aws_instance" "peliculas_server" {
   ami           = "ami-0fc5d935ebf8bc3bc"
   instance_type = "t2.micro"
-  key_name = "appmovilllave"
+  key_name = "peliculas_llave"
   vpc_security_group_ids = [ "sg-01c3da519e0e6a3dc" ]
   associate_public_ip_address = true
 
@@ -25,18 +25,18 @@ resource "aws_instance" "app_server" {
     destination = "/home/ubuntu/Pelicula.zip"
   }
   provisioner "local-exec" {
-    command = "sudo apt install docker docker-compose -y && unzip -q Pelicula.zip && cd Pelicula && sudo docker-compose up --build
+    command = "sudo ./script.sh"
     interpreter = [ "/bin/bash", "-c" ]
   }
 
   connection {
     type = "ssh"
     user = "ubuntu"
-    private_key = "${file("~/Documents/Aplicacion/appmovilllave.pem")}"
+    private_key = "${file("C:\Users\danid\OneDrive\Escritorio\PaginaDePeliculas\peliculas_llave.pem")}"
     host = "${self.public_ip}"
   }
 
   tags = {
-    Name = "EjemploIaCsalon3"
+    Name = "PaginaDePeliculas"
   }
 }
